@@ -1,0 +1,257 @@
+<!--
+  -  Fortigate decoders
+  -  Author: Daniel Olivares <dolivares@aconetwork.cl>
+-->
+
+<!-- FortiOS 7.x via syslog -->
+<decoder name="fortigate-firewall-v7">
+    <prematch>date=\d\d\d\d-\d\d-\d\d time=\d\d:\d\d:\d\d devname=</prematch>
+    <type>syslog</type>
+</decoder>
+
+
+<!--
+Aug 22 15:04:33 fortigate.local date=2022-08-22 time=15:04:33 devname="FGT60E-Local" devid="FGT60ETKXXXXXXXX" eventtime=1661195073273590347 tz="-0400" logid="0000000013" type="traffic" subtype="forward" level="notice" vd="root" srcip=x.x.x.x srcport=43254 srcintf="internal" srcintfrole="lan" dstip=x.x.x.x dstport=10051 dstintf="wan1" dstintfrole="wan" srccountry="Reserved" dstcountry="Chile" sessionid=2687623 proto=6 action="client-rst" policyid=1 policytype="policy" poluuid="f892c6ae-02d6-51ed-93f7-2831558dce30" policyname="LAN - WAN" service="tcp/10051" trandisp="snat" transip=190.22.145.155 transport=43254 duration=5 sentbyte=1269 rcvdbyte=908 sentpkt=10 rcvdpkt=9 appcat="unscanned" srchwvendor="VMware" devtype="Computer" osname="Debian" mastersrcmac="00:0c:29:5a:14:e5" srcmac="00:0c:29:5a:14:e5" srcserver=0
+ -->
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex offset="after_parent">"(\S+)" devid="(\S+)" eventtime=(\S+) tz="(\S+)" logid="(\S+)"</regex>
+    <order>devname,devid,eventtime,tz,logid</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex offset="after_regex">type="(\S+)" subtype="(\S+)" level="(\S+)" vd="(\S+)"</regex>
+    <order>type,subtype,level,virtualDomain</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex offset="after_regex">srcip=(\S+) srcport=(\S+) srcintf="(\S+)" srcintfrole="(\S+)" dstip=(\S+) dstport=(\S+) dstintf="(\S+)" dstintfrole="(\S+)"</regex>
+    <order>srcip,srcport,srcintf,srcintfrole,dstip,dstport,dstintf,dstintfrole</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex offset="after_regex">srccountry="(\.+)" dstcountry="(\.+)" sessionid=(\S+) proto=(\S+) action="(\S+)"</regex>
+    <order>srccountry,dstcountry,sessionid,proto,actions</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex offset="after_regex">policyid=(\S+) policytype="(\S+)" poluuid="(\S+)" policyname="(\S+)" service="(\S+)" trandisp="(\S+)" transip=(\S+) transport=(\S+)</regex>
+    <order>policyid,policytype,poluuid,policyname,service,trandisp,transip,transport</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex offset="after_regex">duration=(\S+) sentbyte=(\S+) rcvdbyte=(\S+) sentpkt=(\S+) rcvdpkt=(\S+) appcat="(\S+)"</regex>
+    <order>duration,sentbyte,rcvdbyte,sentpkt,rcvdpkt,appcat</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex offset="after_regex">srchwvendor="(\S+)" devtype="(\S+)" osname="(\S+)" mastersrcmac="(\S+)" srcmac="(\S+)" srcserver=(\S+)</regex>
+    <order>srchwvendor,devtype,osname,mastersrcmac,srcmac,srcserver</order>
+</decoder>
+
+<!--
+Aug 22 17:43:01 fortigate.local date=2022-08-22 time=17:43:01 devname="FGT60E-Local" devid="FGT60ETKXXXXXXXX" eventtime=1661204581058098057 tz="-0400" logid="0001000014" type="traffic" subtype="local" level="notice" vd="root" srcip=52.81.99.225 identifier=19 srcintf="wan1" srcintfrole="wan" dstip=190.22.145.155 dstintf="root" dstintfrole="undefined" srccountry="China" dstcountry="Chile" sessionid=2755489 proto=1 action="accept" policyid=0 policytype="local-in-policy" service="PING" trandisp="noop" app="PING" duration=60 sentbyte=36 rcvdbyte=36 sentpkt=1 rcvdpkt=1 appcat="unscanned"
+ -->
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>srcip=(\S+) identifier=(\S+) srcintf="(\S+)" srcintfrole="(\S+)" dstip=(\S+) dstintf="(\S+)" dstintfrole="(\S+)"</regex>
+    <order>srcip,identifier,srcintf,srcintfrole,dstip,dstintf,dstintfrole</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>srccountry="(\.+)" dstcountry="(\.+)"</regex>
+    <order>srccountry,dstcountry</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>sessionid=(\S+) proto=(\S+) action="(\S+)"</regex>
+    <order>sessionid,proto,actions</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>policyid=(\S+) policytype="(\S+)" service="(\.+)" trandisp="(\S+)" app="(\.+)"</regex>
+    <order>policyid,policytype,service,trandisp,app</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>sentbyte=(\S+) rcvdbyte=(\S+) sentpkt=(\S+) rcvdpkt=(\S+) appcat="(\S+)"</regex>
+    <order>sentbyte,rcvdbyte,sentpkt,rcvdpkt,appcat</order>
+</decoder>
+
+<!--
+Aug 22 18:53:06 fortigate.local date=2022-08-22 time=18:53:06 devname="FGT60E-Local" devid="FGT60ETKXXXXXXXX" eventtime=1661208785254956818 tz="-0400" logid="0000000013" type="traffic" subtype="forward" level="notice" vd="root" srcip=x.x.x.x srcname="hostname" srcport=57309 srcintf="internal" srcintfrole="lan" dstip=142.250.191.78 dstport=443 dstintf="wan1" dstintfrole="wan" srccountry="Reserved" dstcountry="United States" sessionid=2782436 proto=17 action="accept" policyid=1 policytype="policy" poluuid="f892c6ae-02d6-51ed-93f7-2831558dce30" policyname="LAN-WAN" service="udp/443" trandisp="snat" transip=190.22.145.155 transport=57309 duration=417 sentbyte=91684 rcvdbyte=101824 sentpkt=188 rcvdpkt=219 appcat="unscanned" sentdelta=16777 rcvddelta=6354 srchwvendor="Asus" osname="Windows" srcswversion="10" mastersrcmac="74:d0:2b:c6:10:1c" srcmac="74:d0:2b:c6:10:1c" srcserver=0
+ -->
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>srcip=(\S+) srcname="(\S+)" srcport=(\S+) srcintf="(\S+)" srcintfrole="(\S+)" dstip=(\S+) dstport=(\S+) dstintf="(\S+)" dstintfrole="(\S+)"</regex>
+    <order>srcip,srcname,srcport,srcintf,srcintfrole,dstip,dstport,dstintf,dstintfrole</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>srccountry="(\.+)" dstcountry="(\.+)"</regex>
+    <order>srccountry,dstcountry</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>sentdelta=(\S+) rcvddelta=(\S+)</regex>
+    <order>sentdelta,rcvddelta</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>srchwvendor="(\S+)" osname="(\S+)" srcswversion=(\S+) mastersrcmac="(\S+)" srcmac="(\S+)" srcserver=(\S+)</regex>
+    <order>srchwvendor,osname,srcswversion,mastersrcmac,srcmac,srcserver</order>
+</decoder>
+
+<!--
+Aug 22 19:07:04 fortigate.local date=2022-08-22 time=19:07:04 devname="FGT60E-Local" devid="FGT60ETKXXXXXXXX" eventtime=1661209623443668463 tz="-0400" logid="0100022952" type="event" subtype="system" level="warning" vd="root" logdesc="FortiCloud activation failed" user="auto-join" action="login" msg="FortiCloud service activation failed"
+-->
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>logdesc="(\.*)"</regex>
+    <order>logdesc</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>user="(\S+)" action="(\S+)"</regex>
+    <order>user,actions</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>msg="(\.+)"</regex>
+    <order>extra_data</order>
+</decoder>
+
+<!--
+Aug 22 20:02:30 fortigate.local date=2022-08-22 time=20:02:30 devname="FGT60E-Local" devid="FGT60ETKXXXXXXXX" eventtime=1661212950357633922 tz="-0400" logid="0100040704" type="event" subtype="system" level="notice" vd="root" logdesc="System performance statistics" action="perf-stats" cpu=0 mem=35 totalsession=257 disk=0 bandwidth="79/71" setuprate=1 disklograte=0 fazlograte=0 freediskstorage=825 sysuptime=436330 waninfo="name=wan1,bytes=11045448983/204411413630,packets=91248455/175706832;name=wan2,bytes=0/0,packets=0/0;" msg="Performance statistics: average CPU: 0, memory:  35, concurrent sessions:  257, setup-rate: 1"
+-->
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>logdesc="(\.+)" action="(\S+)" cpu=(\S+) mem=(\S+) totalsession=(\S+) disk=(\S+) bandwidth="(\.+)"</regex>
+    <order>logdesc,actions,cpu,mem,totalsession,disk,bandwidth</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>setuprate="(\S+)" disklograte="(\S+)" fazlograte=(\S+) freediskstorage=(\S+) sysuptime=(\S+)</regex>
+    <order>setuprate,disklograte,fazlograte,freediskstorage,sysuptime</order>
+</decoder>
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>waninfo="(\.+)" msg="(\.+)"</regex>
+    <order>waninfo,extra_data</order>
+</decoder>
+
+<!--
+Aug 22 20:53:19 fortigate.local date=2022-08-22 time=20:53:19 devname="FGT60E-Local" devid="FGT60ETKXXXXXXXX" eventtime=1661215999304601123 tz="-0400" logid="0101039944" type="event" subtype="vpn" level="error" vd="root" logdesc="SSL VPN alert" action="ssl-alert" tunneltype="ssl" tunnelid=0 remip=x.x.x.x user="N/A" group="N/A" dst_host="N/A" reason="warning" desc="close notify" msg="SSL alerts"
+-->
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>logdesc="(\.+)" action="(\.+)" tunneltype="(\S+)" tunnelid=(\S+) remip=(\S+) user="(\S+)" group="(\S+)" dst_host="(\S+)"</regex>
+    <order>logdesc,actions,tunneltype,tunnelid,remip,dstuser,group,dst_host</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>reason="(\.+)" desc="(\.+)" msg="(\S+)"</regex>
+    <order>reason,desc,extra_data</order>
+</decoder>
+
+<!--
+Aug 22 21:02:25 fortigate.local date=2022-08-22 time=21:02:25 devname="FGT60E-Local" devid="FGT60ETKXXXXXXXX" eventtime=1661216544386155988 tz="-0400" logid="0101039947" type="event" subtype="vpn" level="information" vd="root" logdesc="SSL VPN tunnel up" action="tunnel-up" tunneltype="ssl-tunnel" tunnelid=1552377657 remip=x.x.x.x tunnelip=10.212.134.200 user="user_name" group="user_group" dst_host="N/A" reason="tunnel established" msg="SSL tunnel established"
+-->
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>logdesc="(\.+)" action="(\.+)" tunneltype="(\S+)" tunnelid=(\S+) remip=(\S+) tunnelip=(\S+) user="(\S+)" group="(\S+)"</regex>
+    <order>logdesc,actions,tunneltype,tunnelid,remip,tunnelip,dstuser,group</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>dst_host="(\.+)" reason="(\.+)" msg="(\.+)"</regex>
+    <order>dst_host,reason,extra_data</order>
+</decoder>
+
+<!--
+Aug 22 21:02:25 fortigate.local date=2022-08-22 time=21:02:25 devname="FGT60E-Local" devid="FGT60ETKXXXXXXXX" eventtime=1661216544233315652 tz="-0400" logid="0107045124" type="event" subtype="endpoint" level="warning" vd="root" logdesc="FortiClient VPN connected" ip=10.212.134.200 fctuid="82FD2B5D62BF9E611DE857B012BC9D3F" sn="FGT60ETKXXXXXXXX" intf="wan1" user="user_name" msg="FortiClient VPN is connected."
+-->
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>logdesc="(\.+)" ip=(\S+) fctuid="(\S+)" sn="(\S+)" intf="(\S+)" user="(\S+)" msg="(\.+)"</regex>
+    <order>logdesc,ip,fctuid,sn,intf,dstuser,extra_data</order>
+</decoder>
+
+<!--
+Aug 22 23:05:25 fortigate.local date=2022-08-22 time=23:05:25 devname="FGT60E-Local" devid="FGT60ETKXXXXXXXX" eventtime=1661223925455233662 tz="-0400" logid="0100032002" type="event" subtype="system" level="alert" vd="root" logdesc="Admin login failed" sn="0" user="asdasdasd" ui="https(x.x.x.x)" method="https" srcip=x.x.x.x dstip=x.x.x.x action="login" status="failed" reason="name_invalid" msg="Administrator asdasdasd login failed from https(x.x.x.x) because of invalid user name"
+-->
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>logdesc="(\.+)" sn="(\S+)" user="(\S+)" ui="(\.+)" method="(\S+)"</regex>
+    <order>logdesc,sn,dstuser,ui,method</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>srcip=(\S+) dstip=(\S+) action="(\S+)" status="(\S+)" reason="(\S+)" msg="(\.*)"</regex>
+    <order>srcip,dstip,actions,status_fg,reason,extra_data</order>
+</decoder>
+
+
+<!--
+Aug 22 23:41:55 fortigate.local date=2022-08-22 time=23:41:55 devname="FGT60E-Local" devid="FGT60ETKXXXXXXXX" eventtime=1661226115385449184 tz="-0400" logid="0100032021" type="event" subtype="system" level="alert" vd="root" logdesc="Admin login disabled" ui="x.x.x.x" action="login" status="failed" reason="exceed_limit" msg="Login disabled from IP x.x.x.x for 60 seconds because of 3 bad attempts"
+-->
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>logdesc="(\.+)" ui="(\.+)" action="(\S+)" status="(\S+)" reason="(\S+)" msg="(\.*)"</regex>
+    <order>logdesc,ui,actions,status_fg,reason,extra_data</order>
+</decoder>
+
+<!--
+Aug 23 00:50:17 fortigate.local date=2022-08-23 time=00:50:16 devname="FGT60E-Local" devid="FGT60ETKXXXXXXXX" eventtime=1661230216480453628 tz="-0400" logid="0100032001" type="event" subtype="system" level="information" vd="root" logdesc="Admin login successful" sn="1661230216" user="admin" ui="https(x.x.x.x)" method="https" srcip=x.x.x.x dstip=x.x.x.x action="login" status="success" reason="none" profile="super_admin" msg="Administrator admin logged in successfully from https(x.x.x.x)"
+-->
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>logdesc="(\.+)" sn="(\S+)" user="(\S+)" ui="(\.+)" method="(\S+)"</regex>
+    <order>logdesc,sn,dstuser,ui,method</order>
+</decoder>
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>srcip=(\S+) dstip=(\S+) action="(\S+)" status="(\.+)" reason="(\S+)" profile="(\.+)" msg="(\.+)"</regex>
+    <order>srcip,dstip,actions,status,reason,profile,extra_data</order>
+</decoder>
+
+<!--
+Aug 23 01:05:28 fortigate.local date=2022-08-23 time=01:05:28 devname="FGT60E-Local" devid="FGT60ETKXXXXXXXX" eventtime=1661231127465281933 tz="-0400" logid="0100044547" type="event" subtype="system" level="information" vd="root" logdesc="Object attribute configured" user="admin" ui="GUI(x.x.x.x)" action="Add" cfgtid=6881300 cfgpath="firewall.policy" cfgobj="8" cfgattr="uuid[3249c840-22a1-51ed-dbb6-54082b2b52c4]name[TEST-TEST]srcintf[internal]dstintf[internal]action[accept]srcaddr[all]dstaddr[EDR]srcaddr6[]dstaddr6[]src-vendor-mac[]schedule[always]service[ALL]groups[]users[]fsso-groups[]comments[TEST]custom-log-fields[]" msg="Add firewall.policy 8"
+-->
+
+<decoder name="fortigate-firewall-v7-fields">
+    <parent>fortigate-firewall-v7</parent>
+    <regex>logdesc="(\.+)" user="(\S+)" ui="(\.+)" action="(\S+)" cfgtid=(\S+) cfgpath="(\.+)" cfgobj="(\.+)" cfgattr="(\.+)" msg="(\.+)"</regex>
+    <order>logdesc,dstuser,ui,actions,cftid, cfgpath,cfgobj,cfgattr,extra_data</order>
+</decoder>

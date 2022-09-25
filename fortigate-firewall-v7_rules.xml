@@ -1,0 +1,120 @@
+<!--
+  -  Fortigate rules
+  -  Author: Daniel Olivares.
+-->
+
+<group name="Firewall,Fortigate,">
+  <rule id="100300" level="0">
+    <decoded_as>fortigate-firewall-v7</decoded_as>
+    <description>Fortigate messages grouped.</description>
+  </rule>
+
+<!-- VPN Rules -->
+
+<rule id="100310" level="3">
+     <if_sid>100300</if_sid>
+     <match>FortiClient VPN is connected</match>
+     <description>Fortigate: FortiClient VPN is connected</description>
+     <group>VPN</group>
+
+</rule>
+
+<rule id="100311" level="3">
+     <if_sid>100300</if_sid>
+     <match>SSL VPN tunnel up</match>
+     <description>Fortigate: SSL VPN tunnel up</description>
+     <group>VPN</group>
+
+</rule>
+
+<rule id="100312" level="3">
+     <if_sid>100300</if_sid>
+     <match>SSL VPN tunnel down</match>
+     <description>Fortigate: SSL VPN tunnel down</description>
+     <group>VPN</group>
+
+</rule>
+
+<rule id="100313" level="3">
+     <if_sid>100300</if_sid>
+     <match>SSL VPN alert</match>
+     <description>Fortigate: SSL VPN alert</description>
+     <group>VPN</group>
+
+</rule>
+
+<rule id="100314" level="3">
+     <if_sid>100300</if_sid>
+     <match>SSL VPN statistics</match>
+     <description>Fortigate: SSL VPN statistics</description>
+     <group>VPN</group>
+
+</rule>
+
+<!-- System Rules -->
+
+<rule id="100330" level="3">
+     <if_sid>100300</if_sid>
+     <match>System performance statistics</match>
+     <description>Fortigate: System performance statistics</description>
+     <group>System</group>
+</rule>
+
+<rule id="100331" level="6">
+    <if_sid>100300</if_sid>
+    <match>Admin login failed</match>
+    <match>passwd_invalid|name_invalid</match>
+    <description>Fortigate: Account login failed</description>
+</rule>
+
+<rule id="100332" level="10">
+    <if_sid>100300</if_sid>
+    <field name="type">^event$</field>
+    <field name="subtype">^system$</field>
+    <field name="actions">^login$</field>
+    <field name="status_fg">^failed$</field>
+    <field name="reason">^exceed_limit$</field>
+    <description>Fortigate: Login Disabled</description>
+</rule>
+
+<rule id="100333" level="43">
+    <if_sid>100300</if_sid>
+    <match>Admin login successful</match>
+    <description>Fortigate: Account login successful</description>
+</rule>
+
+<rule id="100334" level="3">
+    <if_sid>100300</if_sid>
+    <match>Admin logout successful</match>
+    <description>Fortigate: Account logout successful</description>
+</rule>
+
+<rule id="100335" level="10">
+    <if_sid>100300</if_sid>
+    <match>Object attribute configured|Attribute configured|Global time setting changed by user|Global setting changed</match>
+    <description>Fortigate: Configuration change</description>
+</rule>
+
+<rule id="100336" level="10">
+    <if_sid>100300</if_sid>
+    <match>Device in the Security Fabric was updated.</match>
+    <description>Fortigate:  Security Fabric was updated</description>
+</rule>
+
+<!-- Traffic Rules -->
+
+  <rule id="100350" level="3">
+    <if_sid>100300</if_sid>
+    <field name="type">^traffic$</field>
+    <field name="subtype">^forward$</field>
+    <description>Fortigate: Forward Traffic</description>
+  </rule>
+
+  <rule id="100351" level="3">
+    <if_sid>100300</if_sid>
+    <field name="type">^traffic$</field>
+    <field name="subtype">^local$</field>
+    <description>Fortigate: Local Traffic</description>
+  </rule>
+
+</group>
